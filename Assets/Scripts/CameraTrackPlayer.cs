@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class CameraTrackPlayer : MonoBehaviour {
     [SerializeField] private Transform _player;
+    [SerializeField] private float _trackSpeed;
 
     private void Start() {
         if (_player == null) {
@@ -13,7 +14,7 @@ public class CameraTrackPlayer : MonoBehaviour {
     }
 
     private void Update() {
-        float delta = Time.deltaTime;
+        float delta = Time.deltaTime * _trackSpeed;
         transform.position = new Vector3(
             Mathf.Lerp(transform.position.x, _player.position.x, delta),
             Mathf.Lerp(transform.position.y, _player.position.y, delta),
