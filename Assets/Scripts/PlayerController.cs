@@ -3,10 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class PlayerController : MonoBehaviour {
-    // Limits on the player's horizontal movement
-
-    [SerializeField] private float _maxHorizontal;
-    [SerializeField] private float _minHorizontal;
+    private DoorLink door = null;
 
     public enum Direction {
         Left = -1,
@@ -35,7 +32,7 @@ public class PlayerController : MonoBehaviour {
     // Update is called once per frame
     void Update() {
         MovePlayer();
-        AimWeapon();
+        //AimWeapon();
 
         if (Input.GetKey(KeyCode.Escape)) { Debug.Log("Bail!"); }
     }
@@ -64,15 +61,17 @@ public class PlayerController : MonoBehaviour {
     }
 
     private void MovePlayer() {
-        if (MoveLeft || MoveRight) {
-            _direction = MoveLeft ? Direction.Left : Direction.Right;
+        if (LeftPressed || RightPressed) {
+            _direction = LeftPressed ? Direction.Left : Direction.Right;
             float new_x = transform.position.x + _speed * (float)_direction * Time.deltaTime;
-            if (new_x < _minHorizontal) { new_x = _minHorizontal; }
-            if (new_x > _maxHorizontal) { new_x = _maxHorizontal; }
             transform.SetPositionAndRotation(
                     new Vector3(new_x, transform.position.y, 0),
                     Quaternion.Euler(0, 0, -_tiltAngle * (float)_direction)
                 );
+        } else if (UpPressed || DownPressed) {
+            if (door != null) {
+                transform.position = door.GetDestination();
+            }
         } else {
             transform.SetPositionAndRotation(
                     transform.position,
@@ -81,11 +80,23 @@ public class PlayerController : MonoBehaviour {
         }
     }
 
-    private bool MoveLeft {
-        get { return Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.LeftArrow);  }
+    private bool LeftPressed { get { return Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.LeftArrow) || Input.GetKey(KeyCode.Keypad4); } }
+    private bool RightPressed { get { return Input.GetKey(KeyCode.D) || Input.GetKey(KeyCode.RightArrow) || Input.GetKey(KeyCode.Keypad6); } }
+    private bool UpPressed { get { return Input.GetKey(KeyCode.W) || Input.GetKey(KeyCode.UpArrow) || Input.GetKey(KeyCode.Keypad8); } }
+    private bool DownPressed { get { return Input.GetKey(KeyCode.S) || Input.GetKey(KeyCode.DownArrow) || Input.GetKey(KeyCode.Keypad2); } }
+    private bool FirePressed { get { return Input.GetKey(KeyCode.Space) || Input.GetKey(KeyCode.Keypad5); } }
+
+    private void OnTriggerEnter2D(Collider2D other) {
+        if (other.gameObject.CompareTag("Door")) {
+            Debug.Log("Player has entered door " + other);
+            door = other.gameObject.GetComponent<DoorLink>();
+        }
     }
 
-    private bool MoveRight {
-        get { return Input.GetKey(KeyCode.D) || Input.GetKey(KeyCode.RightArrow); }
+    private void OnTriggerExit2D(Collider2D other) {
+        if (other.gameObject.CompareTag("Door")) {
+            Debug.Log("Player has exited door " + other);
+            door = null;
+        }
     }
 }
