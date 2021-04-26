@@ -32,9 +32,11 @@ public class PlayerController : MonoBehaviour {
     // Update is called once per frame
     void Update() {
         MovePlayer();
-        //AimWeapon();
+        AimWeapon();
 
-        if (Input.GetKey(KeyCode.Escape)) { Debug.Log("Bail!"); }
+#if UNITY_EDITOR
+        if (Input.GetKey(KeyCode.Escape)) { UnityEditor.EditorApplication.isPlaying = false; }
+#endif
     }
 
     private void AimWeapon() {
@@ -70,13 +72,14 @@ public class PlayerController : MonoBehaviour {
                 );
         } else if (UpPressed || DownPressed) {
             if (door != null) {
-                transform.position = door.GetDestination();
+                if ((UpPressed && door.IsBottom) || (DownPressed && !door.IsBottom)) {
+                    if (door.Destination != Vector3.positiveInfinity) {
+                        transform.position = door.Destination;
+                    }
+                }
             }
         } else {
-            transform.SetPositionAndRotation(
-                    transform.position,
-                    Quaternion.Euler(0, 0, 0)
-                );
+            transform.SetPositionAndRotation(transform.position, Quaternion.Euler(0, 0, 0));
         }
     }
 
@@ -88,14 +91,12 @@ public class PlayerController : MonoBehaviour {
 
     private void OnTriggerEnter2D(Collider2D other) {
         if (other.gameObject.CompareTag("Door")) {
-            Debug.Log("Player has entered door " + other);
             door = other.gameObject.GetComponent<DoorLink>();
         }
     }
 
     private void OnTriggerExit2D(Collider2D other) {
         if (other.gameObject.CompareTag("Door")) {
-            Debug.Log("Player has exited door " + other);
             door = null;
         }
     }
