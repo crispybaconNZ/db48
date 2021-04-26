@@ -3,6 +3,10 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class PlayerController : MonoBehaviour {
+    // Limits on the player's horizontal movement
+
+    [SerializeField] private float _maxHorizontal;
+    [SerializeField] private float _minHorizontal;
 
     public enum Direction {
         Left = -1,
@@ -62,8 +66,11 @@ public class PlayerController : MonoBehaviour {
     private void MovePlayer() {
         if (MoveLeft || MoveRight) {
             _direction = MoveLeft ? Direction.Left : Direction.Right;
+            float new_x = transform.position.x + _speed * (float)_direction * Time.deltaTime;
+            if (new_x < _minHorizontal) { new_x = _minHorizontal; }
+            if (new_x > _maxHorizontal) { new_x = _maxHorizontal; }
             transform.SetPositionAndRotation(
-                    transform.position + new Vector3(_speed * (float)_direction * Time.deltaTime, 0, 0),
+                    new Vector3(new_x, transform.position.y, 0),
                     Quaternion.Euler(0, 0, -_tiltAngle * (float)_direction)
                 );
         } else {
