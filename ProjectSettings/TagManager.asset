@@ -6,6 +6,9 @@ TagManager:
   tags:
   - Door
   - Bullet
+  - Scenery
+  - Enemy
+  - EndOfLevel
   layers:
   - Default
   - TransparentFX

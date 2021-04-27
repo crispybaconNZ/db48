@@ -11,11 +11,16 @@ public class SentryBot : MonoBehaviour {
     public Sprite rightFacing;
     private SentryBotStatus initialStatus;
     private PlayerController.Direction initialDirection;
+    [SerializeField] private int _startingHealth = 2;
+    private int _health;
 
     // weaponry
     private Vector2 _bulletLaunchPoint;
-    [SerializeField] private Transform _leftLaunchPoint, _rightLaunchPoint;
+    [SerializeField] private Transform _leftLaunchPoint, _rightLaunchPoint, _explosion;
     [SerializeField] private Transform _bulletPrefab;
+    [SerializeField] private float _rateOfFire = 2f;   // seconds between shots
+    private float _lastShotFired;
+    private AudioSource _gunshot_sound, _explosion_sound;
 
     private readonly float _verticalDetectionThreshold = 1f;
 
@@ -40,6 +45,25 @@ public class SentryBot : MonoBehaviour {
     public SentryBotStatus _currentStatus = SentryBotStatus.Idling;
     public PlayerController.Direction direction = PlayerController.Direction.Stationary;
 
+    private void Awake() {
+        startPosition = transform.position;
+        initialStatus = _currentStatus;
+        initialDirection = direction;
+        _currentDestination = _startWaypoint;
+
+        if (_player == null) {
+            _player = GameObject.Find("Player").GetComponent<PlayerController>();
+        }
+
+        SetLaunchpointOnDirection();
+        _lastShotFired = 0f;
+        _health = _startingHealth;
+
+        AudioSource[] sounds = transform.GetComponentsInChildren<AudioSource>();
+        _gunshot_sound = sounds[0];
+        _explosion_sound = sounds[1];
+    }
+
     private void SetLaunchpointOnDirection() {
         if (direction == PlayerController.Direction.Left) {
             _bulletLaunchPoint = _leftLaunchPoint.position;
@@ -49,26 +73,21 @@ public class SentryBot : MonoBehaviour {
     }
 
     private void FireBullet() {
-        Quaternion rotation;
+        if ((Time.time - _lastShotFired < _rateOfFire) || _player.IsDead) {
+            return;
+        }
 
+        Quaternion rotation;
         if (direction == PlayerController.Direction.Left) {
             rotation = Quaternion.Euler(0, 0, 180);
         } else {
             rotation = Quaternion.identity;
         }
         Transform bullet = Instantiate(_bulletPrefab, _bulletLaunchPoint, rotation);
-        
-    }
-
-    private void Awake() {
-        startPosition = transform.position;
-        initialStatus = _currentStatus;
-        initialDirection = direction;
-        _currentDestination = _startWaypoint;
-
-        if (_player == null) {
-            _player = GameObject.Find("Player").GetComponent<PlayerController>();
-        }        
+        bullet.GetComponent<Bullet>().Direction = bullet.TransformDirection((float)direction, 0, 0);
+        bullet.GetComponent<Bullet>().Owner = gameObject.tag;
+        _gunshot_sound.Play();
+        _lastShotFired = Time.time;
     }
 
     private void DoIdleBob() {
@@ -76,6 +95,18 @@ public class SentryBot : MonoBehaviour {
         Vector2 bobbing = transform.position;
         bobbing.y = startPosition.y + (Mathf.Sin(Time.time * _bobFrequency) * _bobStrength);
         transform.position = bobbing;
+    }
+
+    public void TakeDamage(int damage) {
+        _health -= damage;
+
+        if (_health <= 0) {
+            // trigger explosion at this spot
+            _explosion_sound.Play();
+
+            // remove bot           
+            Destroy(gameObject);
+        }
     }
 
     void Update() {
@@ -103,8 +134,8 @@ public class SentryBot : MonoBehaviour {
                         gameObject.GetComponent<SpriteRenderer>().sprite = rightFacing;
                         direction = PlayerController.Direction.Right;
                     }
-
-                    // do shooting!
+                    SetLaunchpointOnDirection();
+                    FireBullet();
                 } else {
                     gameObject.GetComponent<SpriteRenderer>().sprite = frontFacing;
                     direction = initialDirection;
