@@ -433,6 +433,22 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 2354128866359840044, guid: 90732ac33c7304e46ae307bddacc67c6, type: 3}
+      propertyPath: m_Size.x
+      value: 0.717474
+      objectReference: {fileID: 0}
+    - target: {fileID: 2354128866359840044, guid: 90732ac33c7304e46ae307bddacc67c6, type: 3}
+      propertyPath: m_Size.y
+      value: 3.8415494
+      objectReference: {fileID: 0}
+    - target: {fileID: 2354128866359840044, guid: 90732ac33c7304e46ae307bddacc67c6, type: 3}
+      propertyPath: m_Offset.x
+      value: 0.3275633
+      objectReference: {fileID: 0}
+    - target: {fileID: 2354128866359840044, guid: 90732ac33c7304e46ae307bddacc67c6, type: 3}
+      propertyPath: m_Offset.y
+      value: -0.029417753
+      objectReference: {fileID: 0}
     - target: {fileID: 6864288256258969420, guid: 90732ac33c7304e46ae307bddacc67c6, type: 3}
       propertyPath: m_Name
       value: Block_Floor_1_right
@@ -720,19 +736,19 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2354128866359840044, guid: 90732ac33c7304e46ae307bddacc67c6, type: 3}
       propertyPath: m_Size.x
-      value: 23.140133
+      value: 23.58611
       objectReference: {fileID: 0}
     - target: {fileID: 2354128866359840044, guid: 90732ac33c7304e46ae307bddacc67c6, type: 3}
       propertyPath: m_Size.y
-      value: 0.070672035
+      value: 0.07638967
       objectReference: {fileID: 0}
     - target: {fileID: 2354128866359840044, guid: 90732ac33c7304e46ae307bddacc67c6, type: 3}
       propertyPath: m_Offset.x
-      value: 8.350903
+      value: 8.219397
       objectReference: {fileID: 0}
     - target: {fileID: 2354128866359840044, guid: 90732ac33c7304e46ae307bddacc67c6, type: 3}
       propertyPath: m_Offset.y
-      value: -0.8982241
+      value: -0.8953653
       objectReference: {fileID: 0}
     - target: {fileID: 6864288256258969420, guid: 90732ac33c7304e46ae307bddacc67c6, type: 3}
       propertyPath: m_Name
@@ -900,7 +916,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _camera: {fileID: 1738584584}
-  _cursorTexture: {fileID: 2800000, guid: 85beb8e5b2ac3384589ee370c8af65b1, type: 3}
+  _cursorTexture: {fileID: 2800000, guid: 622716e174a04e0458d402d1d8cff103, type: 3}
 --- !u!4 &753925412
 Transform:
   m_ObjectHideFlags: 0
@@ -22097,9 +22113,17 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 1738584584}
     - target: {fileID: 6627197165274055059, guid: 52b359b6e57724349bac0639cef2fb65, type: 3}
+      propertyPath: _aimSpeed
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 6627197165274055059, guid: 52b359b6e57724349bac0639cef2fb65, type: 3}
       propertyPath: _explosion
       value: 
       objectReference: {fileID: 5908342849050074657, guid: 8b0961a4a3c4d7f439071bae66b54368, type: 3}
+    - target: {fileID: 6627197165274055059, guid: 52b359b6e57724349bac0639cef2fb65, type: 3}
+      propertyPath: _rateOfFire
+      value: 0.2
+      objectReference: {fileID: 0}
     - target: {fileID: 6627197165274055059, guid: 52b359b6e57724349bac0639cef2fb65, type: 3}
       propertyPath: _maxHorizontal
       value: 2
@@ -22240,6 +22264,22 @@ PrefabInstance:
     - target: {fileID: 1766504065606468854, guid: 90732ac33c7304e46ae307bddacc67c6, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2354128866359840044, guid: 90732ac33c7304e46ae307bddacc67c6, type: 3}
+      propertyPath: m_Size.x
+      value: 0.46018028
+      objectReference: {fileID: 0}
+    - target: {fileID: 2354128866359840044, guid: 90732ac33c7304e46ae307bddacc67c6, type: 3}
+      propertyPath: m_Size.y
+      value: 3.812961
+      objectReference: {fileID: 0}
+    - target: {fileID: 2354128866359840044, guid: 90732ac33c7304e46ae307bddacc67c6, type: 3}
+      propertyPath: m_Offset.x
+      value: -0.13842297
+      objectReference: {fileID: 0}
+    - target: {fileID: 2354128866359840044, guid: 90732ac33c7304e46ae307bddacc67c6, type: 3}
+      propertyPath: m_Offset.y
+      value: -0.015123665
       objectReference: {fileID: 0}
     - target: {fileID: 6864288256258969420, guid: 90732ac33c7304e46ae307bddacc67c6, type: 3}
       propertyPath: m_Name
@@ -23196,7 +23236,7 @@ Camera:
   far clip plane: 1000
   field of view: 60
   orthographic: 1
-  orthographic size: 3
+  orthographic size: 4
   m_Depth: -1
   m_CullingMask:
     serializedVersion: 2
